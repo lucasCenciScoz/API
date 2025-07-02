@@ -27,10 +27,10 @@ app.get("/cliente" , async (req , res) => {
 app.get("/cliente/:id" ,async (req , res) => {
     const id = req.params.id;
     try{
-       const [rows] = await db.query("select * from clientes id = ?" , [id]);
+       const [rows] = await db.query("select * from clientes WHERE id = ?" , [id]);
 
-                if(rows.lenght > 0 ){
-                    res.json(rows[0]);
+                if(rows.length > 0 ){
+                    return res.json(rows[0]);
                 }
 
                 res.status(404).send("Cliente com id:" + id + "não encontrado!")
@@ -67,9 +67,9 @@ app.put("/cliente/:id",async  (req , res) =>{
 
     try{
         const [rows] = await db.query("Select * from cliente where id = ?", [id]);
-        if (rows.lenght > 0){
+        if (rows.length > 0){
             let cliente = req.body;
-            const [rows] = await db.query("Update cliente set nome = ?, idade = ?,cpf = ?,cpf = ? Where id = ?",
+            const [rows] = await db.query("Update cliente set nome = ?, idade = ?,cpf = ? Where id = ?",
             [cliente.nome , cliente.idade, cliente.cpf , id])
 
             cliente.id = id
@@ -87,7 +87,7 @@ app.delete("/cliente/:id", async(req , res) =>{
    try{
        const [rows] = await db.query("Delete From cliente Where id = ? " , [id]);
        if (rows.affectedRows > 0){
-        res.status(204).send("Cliente deletado com sucesso!")
+        res.status(200).send("Cliente deletado com sucesso!")
        }
        res.status(404).send("Cliente não encontrado")
    }catch(error){
