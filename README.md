@@ -4,17 +4,65 @@ API RESTful para gerenciamento de revenda de carros, desenvolvida com Node.js, E
 
 ---
 
-## Requisitos mínimos do sistema
+## Script banco de dados 
 
-- Gerenciar clientes com nome e CPF.  
-- Gerenciar carros com marca, modelo, ano, preço e estoque.  
-- Registrar pedidos vinculados a clientes, com status: Pendente, Concluído, Cancelado.  
-- Registrar vendas associadas a pedidos e carros, incluindo quantidade e preço total.  
-- Registrar recompras de carros por clientes.  
-- Permitir operações CRUD para todas as entidades.  
-- Validar dados e tratar erros nas requisições.  
-- Manter integridade referencial para evitar exclusão de clientes com pedidos ou vendas vinculados.  
-- Atualizar estoque de carros conforme vendas realizadas.
+banco de dados integrado com o código:
+
+create database AtividadeJL;
+
+use AtividadeJL;
+
+create table cliente(
+id_cliente int auto_increment not null,
+nome varchar(150) not null,
+cpf varchar(14) not null,
+primary key(id_cliente)
+);
+
+
+create table carros(
+id_carrosesp int auto_increment not null,
+marca varchar(50) not null,
+modelo varchar(100) not null,
+ano int not null,
+preco decimal(12,2) not null,
+estoque int not null,
+primary key(id_carrosesp)
+);
+
+
+create table pedidos(
+id_pedido int auto_increment not null,
+id_cliente int,
+status enum ('Pendente','Concluído', 'Cancelado' ),
+foreign key(id_cliente) references cliente(id_cliente),
+primary key (id_pedido)
+);
+
+
+create table vendas(
+id_pedido int,
+id_carrosesp int,
+quantidade int,
+preco_total decimal(12,2),
+primary key(id_pedido, id_carrosesp),
+foreign key (id_pedido) references pedidos(id_pedido),
+foreign key (id_carrosesp) references carros(id_carrosesp)
+);
+
+
+create table recompras(
+id_recompra int auto_increment,
+id_cliente int,
+modelo varchar(50),
+marca varchar(50),
+ano int,
+valor_pago decimal (12,2),
+primary key(id_recompra),
+foreign key(id_cliente) references cliente(id_cliente)
+);
+
+
 
 ---
 
@@ -28,9 +76,6 @@ API RESTful para gerenciamento de revenda de carros, desenvolvida com Node.js, E
 npm install
 node app.js
 
-markdown
-Copiar
-Editar
 
 5. O servidor iniciará na porta 3000 (http://localhost:3000).  
 6. Use o Postman ou similar para testar os endpoints da API.
