@@ -74,6 +74,7 @@ foreign key(id_cliente) references cliente(id_cliente)
 4. No terminal, dentro da pasta do projeto, execute:
 
 npm install
+
 node app.js
 
 
